@@ -20,16 +20,14 @@ class TorchModel(nn.Module):
     def __init__(self, vector_dim, sentence_length, vocab):
         super(TorchModel, self).__init__()
         self.embedding = nn.Embedding(len(vocab) + 1, vector_dim)
-        self.layer = nn.RNN(input_size=sentence_length, hidden_size=vector_dim, bias=False,
-                            batch_first=True)  # 线性层的一种替换
+        self.layer = nn.RNN(vector_dim, vector_dim, batch_first=True)  # 线性层的一种替换
         self.classify = nn.Linear(vector_dim, sentence_length)
         self.loss = nn.CrossEntropyLoss()
 
     # 当输入真实标签，返回loss值；无真实标签，返回预测值
     def forward(self, x0, y=None):
         x1 = self.embedding(x0)
-        x = x1.transpose(1, 2)
-        x3, x2 = self.layer(x)
+        x3, x2 = self.layer(x1)
         x3 = x3[:, -1, :]
         y_pred = self.classify(x3)
 
@@ -144,9 +142,9 @@ def main():
     # 保存模型
     torch.save(model.state_dict(), "model.pth")
     # 保存词表
-    writer = open("vocab.json", "w", encoding="utf8")
-    writer.write(json.dumps(vocab, ensure_ascii=False, indent=2))
-    writer.close()
+    # writer = open("vocab.json", "w", encoding="utf8")
+    # writer.write(json.dumps(vocab, ensure_ascii=False, indent=2))
+    # writer.close()
     return
 
 
