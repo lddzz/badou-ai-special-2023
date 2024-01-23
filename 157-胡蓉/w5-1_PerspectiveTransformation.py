@@ -49,6 +49,7 @@ def WarpPerspectiveMatrix(src, dst):
     warpMatrix = warpMatrix.reshape((3, 3))
     return warpMatrix
 
+import imutils
 
 def CornerDetection(img):
     # img = cv2.imread('photo1.jpg')
@@ -58,8 +59,13 @@ def CornerDetection(img):
     edged = cv2.Canny(dilate, 30, 120, 3)  # 边缘检测
 
     cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)  # 轮廓检测
-    cnts = cnts[0]
-    # if imutils.is_cv2() else cnts[1]  # 判断是opencv2还是opencv3
+    # cnts = cnts[0]
+    # 判断opencv的版本, # 判断是opencv2还是opencv3
+    if imutils.is_cv2():
+        cnts = cnts[0]
+    else:
+        cnts = cnts[1]
+
     docCnt = None
 
     if len(cnts) > 0:
