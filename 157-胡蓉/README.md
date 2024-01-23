@@ -18,3 +18,13 @@ w4-2_PCA.py
 w4-3_canny_detail.py
 w4-4_canny.py   
 
+第五周作业 
+1.实现透视变换 2.实现kmeans
+w5-1_PerspectiveTransformation.py
+w5-2_kmeans.py
+
+第六周作业
+1.实现sift（调接口）2.实现ransac 3.实现均值哈希和插值哈希
+w6-1_sift.py
+w6-2_ransac.py
+w6_3_Hash.py
