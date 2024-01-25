@@ -2,7 +2,7 @@ import numpy as np
 import utils
 import cv2
 # from keras import backend as K
-from model.AlexNet import AlexNet
+import AlexNet
 
 # K.set_image_dim_ordering('tf')
 
