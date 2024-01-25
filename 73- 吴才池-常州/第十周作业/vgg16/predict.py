@@ -1,4 +1,4 @@
-from nets import vgg16
+import vgg16
 import tensorflow as tf
 import numpy as np
 import utils
