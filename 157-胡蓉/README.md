@@ -28,3 +28,12 @@ w5-2_kmeans.py
 w6-1_sift.py
 w6-2_ransac.py
 w6_3_Hash.py
+
+第七周作业
+1.实现归一化的三种方式 
+w7-1_normalization.py
+
+第八周作业
+1.keras实现手写数字识别 2.从零实现手写数字识别
+w8-1_keras_minist.py
+w8-2_NeuralNetWork.py
