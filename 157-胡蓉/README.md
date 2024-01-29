@@ -37,3 +37,8 @@ w7-1_normalization.py
 1.keras实现手写数字识别 2.从零实现手写数字识别
 w8-1_keras_minist.py
 w8-2_NeuralNetWork.py
+
+第九周作业
+1.tf实现简单神经网络 2.pytorch实现手写数字识别
+w9-1_tf.py
+w9-2_Mnist_pytorch.py
