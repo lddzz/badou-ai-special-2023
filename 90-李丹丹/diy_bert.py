@@ -89,6 +89,7 @@ class DiyBert:
     # bert embedding，使用3层叠加，在经过一个embedding层
     def embedding_forward(self, x):
         # x.shape = [max_len]
+        global count
         we = self.get_embedding(self.word_embeddings, x)  # shpae: [max_len, hidden_size]
         # position embeding的输入 [0, 1, 2, 3]
         pe = self.get_embedding(self.position_embeddings,
@@ -97,12 +98,14 @@ class DiyBert:
         te = self.get_embedding(self.token_type_embeddings, np.array([0] * len(x)))  # shpae: [max_len, hidden_size]
         embedding = we + pe + te
         print("embedding层参数", embedding.shape)
+        count += 3
         # 加和后有一个归一化层
         embedding = self.layer_norm(embedding, self.embeddings_layer_norm_weight,
                                     self.embeddings_layer_norm_bias)  # shpae: [max_len, hidden_size]
         print("嵌入层的 Layer Normalization 层的权重，用于对嵌入表示进行归一化处理 参数是",
               self.embeddings_layer_norm_weight.shape,
               self.embeddings_layer_norm_bias.shape, "embedding层归一化后参数", embedding.shape)
+        count += 2
         return embedding
 
     # embedding层实际上相当于按index索引，或理解为onehot输入乘以embedding矩阵
@@ -145,6 +148,8 @@ class DiyBert:
         print("feed forward层处理后的参数", feed_forward_x.shape)
         # bn层，并使用了残差机制
         x = self.layer_norm(x + feed_forward_x, ff_layer_norm_w, ff_layer_norm_b)
+        global count
+        count += 8
         return x
 
     # self attention的计算
@@ -163,6 +168,7 @@ class DiyBert:
         # x.shape = max_len * hidden_size
         # q_w, k_w, v_w  shape = hidden_size * hidden_size
         # q_b, k_b, v_b  shape = hidden_size
+        global count
         q = np.dot(x, q_w.T) + q_b  # shape: [max_len, hidden_size]      W * X + B lINER
         k = np.dot(x, k_w.T) + k_b  # shpae: [max_len, hidden_size]
         v = np.dot(x, v_w.T) + v_b  # shpae: [max_len, hidden_size]
@@ -185,6 +191,7 @@ class DiyBert:
         qkv = qkv.swapaxes(0, 1).reshape(-1, hidden_size)
         # attention.shape = max_len, hidden_size
         attention = np.dot(qkv, attention_output_weight.T) + attention_output_bias
+        count += 8
         return attention
 
     # 多头机制
@@ -218,7 +225,9 @@ class DiyBert:
 
     # 链接[cls] token的输出层
     def pooler_output_layer(self, x):
+        global count
         x = np.dot(x, self.pooler_dense_weight.T) + self.pooler_dense_bias
+        count += 2
         x = np.tanh(x)
         return x
 
@@ -232,8 +241,10 @@ class DiyBert:
 
 # 自制
 db = DiyBert(state_dict)
+count = 0
 diy_sequence_output, diy_pooler_output = db.forward(x)
 print(diy_sequence_output)
+print("diy bert总共使用了%d 个参数" % count)
 
 # torch
 torch_sequence_output, torch_pooler_output = bert(torch_x)
