@@ -42,3 +42,13 @@ w8-2_NeuralNetWork.py
 1.tf实现简单神经网络 2.pytorch实现手写数字识别
 w9-1_tf.py
 w9-2_Mnist_pytorch.py
+
+第十周作业 
+1.cifar-10实例实现 2.alexnet训练&推理 3.vgg实现 4.resnet实现
+w10-1_cifar-10
+w10-2_alexnet
+w10-3_vgg
+w10-4_resnet
+
+第十周作业
+1.cifar-10实例实现 2.alexnet训练&推理 3.vgg实现 4.resnet实现
