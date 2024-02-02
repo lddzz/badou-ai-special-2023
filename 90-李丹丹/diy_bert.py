@@ -18,10 +18,10 @@ bert.eval()
 x = np.array([2450, 15486, 102, 2110])  # 通过vocab对应输入：深度学习
 torch_x = torch.LongTensor([x])  # pytorch形式输入
 
+seqence_output, pooler_output = bert(torch_x)
+print(seqence_output.shape, pooler_output.shape)
+print(seqence_output, pooler_output)
 
-# seqence_output, pooler_output = bert(torch_x)
-# print(seqence_output.shape, pooler_output.shape)
-# print(seqence_output, pooler_output)
 
 # print(bert.state_dict().keys())  #查看所有的权值矩阵名称
 
@@ -41,7 +41,7 @@ class DiyBert:
     def __init__(self, state_dict):
         self.num_attention_heads = 12
         self.hidden_size = 768
-        self.num_layers = 1
+        self.num_layers = 2
         self.load_weights(state_dict)
 
     def load_weights(self, state_dict):
@@ -225,17 +225,17 @@ class DiyBert:
 
     # 链接[cls] token的输出层
     def pooler_output_layer(self, x):
-        global count
         x = np.dot(x, self.pooler_dense_weight.T) + self.pooler_dense_bias
-        count += 2
         x = np.tanh(x)
+        global count
+        count += 2
         return x
 
     # 最终输出
     def forward(self, x):
         x = self.embedding_forward(x)
         sequence_output = self.all_transformer_layer_forward(x)
-        pooler_output = self.pooler_output_layer(sequence_output[0])
+        pooler_output = self.pooler_output_layer(sequence_output)
         return sequence_output, pooler_output
 
 
@@ -244,11 +244,12 @@ db = DiyBert(state_dict)
 count = 0
 diy_sequence_output, diy_pooler_output = db.forward(x)
 print(diy_sequence_output)
+print(diy_pooler_output)
 print("diy bert总共使用了%d 个参数" % count)
 
 # torch
-torch_sequence_output, torch_pooler_output = bert(torch_x)
-print(torch_sequence_output)
+# torch_sequence_output, torch_pooler_output = bert(torch_x)
+# print(torch_sequence_output)
 
-# print(diy_pooler_output)
+
 # print(torch_pooler_output)
