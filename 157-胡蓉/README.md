@@ -50,5 +50,7 @@ w10-2_alexnet
 w10-3_vgg
 w10-4_resnet
 
-第十周作业
-1.cifar-10实例实现 2.alexnet训练&推理 3.vgg实现 4.resnet实现
+第十一周作业 
+1.实现inceptionv3 2.实现mobilenet
+w11-1_inception
+w11-2-mobilenet
